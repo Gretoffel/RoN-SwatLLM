@@ -129,14 +129,35 @@ function EnvironmentScanner.ScanEnvironment()
         end
     end
 
-    -- Use GOLD team center as the primary scan point if available, else RED or BLUE
     local scanOrigin = nil
+    local scanForward = {X = 1, Y = 0, Z = 0} -- Default forward
+
+    -- 1. Determine Scan Origin (Team Center)
     if internalTeams.GOLD then
         scanOrigin = internalTeams.GOLD.center
     elseif internalTeams.RED then
         scanOrigin = internalTeams.RED.center
     elseif internalTeams.BLUE then
         scanOrigin = internalTeams.BLUE.center
+    end
+
+    -- 2. Determine Reference for Directions (Prefer Player Camera, fallback to Team)
+    local dirOrigin = scanOrigin
+    local dirForward = scanForward
+
+    local pc = Utils.GetPlayerController()
+    if pc and pc:IsValid() then
+        local pawn = pc.Pawn or pc.AcknowledgedPawn
+        if pawn and pawn:IsValid() then
+            dirOrigin = pawn:K2_GetActorLocation()
+            local camRot = pc:GetControlRotation()
+            local yawRad = math.rad(camRot.Yaw)
+            dirForward = {
+                X = math.cos(yawRad),
+                Y = math.sin(yawRad),
+                Z = 0
+            }
+        end
     end
 
     if not scanOrigin then return end
@@ -188,6 +209,7 @@ function EnvironmentScanner.ScanEnvironment()
                             id = myId,
                             location = {X = loc.X, Y = loc.Y, Z = loc.Z},
                             distance = math.floor(math.sqrt(distSq) / 100),
+                            direction = Utils.GetRelativeDirection(dirOrigin, dirForward, loc),
                             locked = isLocked,
                             jammed = isJammed,
                             is_broken = isBroken,
@@ -231,6 +253,7 @@ function EnvironmentScanner.ScanEnvironment()
                             id = char:GetFName():ToString(),
                             location = {X = loc.X, Y = loc.Y, Z = loc.Z},
                             distance = math.floor(math.sqrt(distSq) / 100),
+                            direction = Utils.GetRelativeDirection(dirOrigin, dirForward, loc),
                             is_complying = char.bIsComplying == 1 or char.bIsComplying == true,
                             is_surrendered = char.bSurrendered == 1 or char.bSurrendered == true,
                             combat_state = tostring(char.CombatState or "UNKNOWN")

@@ -95,4 +95,60 @@ function Utils.TableToJson(t, indent)
     return serialize(t, 0)
 end
 
+function Utils.GetDotProduct(v1, v2)
+    return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z
+end
+
+function Utils.GetCrossProductZ(v1, v2)
+    return v1.X * v2.Y - v1.Y * v2.X
+end
+
+function Utils.GetRelativeDirection(origin, forward, target)
+    local toTarget = {
+        X = target.X - origin.X,
+        Y = target.Y - origin.Y,
+        Z = 0 -- Ignore Z for horizontal direction
+    }
+    
+    -- Normalize toTarget
+    local mag = math.sqrt(toTarget.X^2 + toTarget.Y^2)
+    if mag < 10.0 then return "at your position" end
+    toTarget.X = toTarget.X / mag
+    toTarget.Y = toTarget.Y / mag
+    
+    local dot = Utils.GetDotProduct(forward, toTarget)
+    local crossZ = Utils.GetCrossProductZ(forward, toTarget)
+    
+    local direction = ""
+    
+    if dot > 0.707 then
+        direction = "front"
+    elseif dot < -0.707 then
+        direction = "back"
+    else
+        if crossZ > 0 then
+            direction = "right"
+        else
+            direction = "left"
+        end
+    end
+    
+    -- refine with diagonals if needed, but simple 4-way is often better for LLMs
+    -- let's do 8-way for more precision
+    if dot > 0.382 and dot <= 0.924 then
+        if crossZ > 0 then direction = "front-right" else direction = "front-left" end
+    elseif dot < -0.382 and dot >= -0.924 then
+        if crossZ > 0 then direction = "back-right" else direction = "back-left" end
+    elseif dot > 0.924 then
+        direction = "front"
+    elseif dot < -0.924 then
+        direction = "back"
+    else
+        if crossZ > 0 then direction = "right" else direction = "left" end
+    end
+    
+    return direction
+end
+
 return Utils
+
