@@ -11,11 +11,11 @@ Config.P_Key_Action1 = "GOLD MOVE"
 Config.P_Key_Action2 = "NONE"
 
 -- Environment Sensing Configuration
-Config.SCAN_INTERVAL = 3.0   -- How often to update the environment.json (seconds)
+Config.SCAN_INTERVAL = 1.0   -- How often to update the environment.json (seconds)
 Config.SCAN_RADIUS = 4000.0   -- Range to detect objects (4000 units = 40 meters)
 Config.SCAN_DOORS = true
 Config.SCAN_CHARACTERS = false -- User disabled characters
-Config.SCAN_SWAT = false       -- Toggle scanning of SWAT bots
+Config.SCAN_SWAT = true       -- Toggle scanning of SWAT bots
 Config.SCAN_EVIDENCE = true
 
 -- Performance Settings
