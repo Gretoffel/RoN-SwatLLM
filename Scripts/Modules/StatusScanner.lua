@@ -2,6 +2,8 @@ local StatusScanner = {}
 
 -- Cache for SWAT controllers to avoid expensive FindAllOf calls every tick
 StatusScanner.CachedControllers = {}
+StatusScanner.LastCacheUpdate = 0
+StatusScanner.CACHE_INTERVAL = 5.0 -- SECONDS
 
 -- Team mapping from ETeamType (ReadyOrNot_enums.hpp)
 -- TT_NONE = 0
@@ -26,6 +28,8 @@ StatusScanner.PositionEnum = {
 
 -- Update the cache of SWAT controllers
 function StatusScanner.UpdateCache()
+    local currentTime = os.time()
+    
     StatusScanner.CachedControllers = {}
     local allControllers = FindAllOf("SWATController")
     
@@ -33,7 +37,7 @@ function StatusScanner.UpdateCache()
         for _, controller in ipairs(allControllers) do
             if controller:IsValid() and controller.Pawn and controller.Pawn:IsValid() then
                 local botName = controller.Pawn:GetFName():ToString()
-                -- Filter out trailers or non-swat if necessary (though FindAllOf("SWATController") is specific)
+                -- Filter out trailers or non-swat if necessary
                 if not string.find(botName, "Trailer") then
                     table.insert(StatusScanner.CachedControllers, controller)
                 end
@@ -41,18 +45,29 @@ function StatusScanner.UpdateCache()
         end
     end
     
-    print(string.format("[SwatLLM] StatusScanner: Cached %d SWAT controllers.\n", #StatusScanner.CachedControllers))
+    StatusScanner.LastCacheUpdate = currentTime
+    -- print(string.format("[SwatLLM] StatusScanner: Cached %d SWAT controllers.", #StatusScanner.CachedControllers))
 end
 
--- Check if the cache is still valid (bots exist and are valid)
+-- Check if the cache is still valid
 function StatusScanner.IsCacheValid()
-    if #StatusScanner.CachedControllers == 0 then return false end
+    local currentTime = os.time()
+    if currentTime - StatusScanner.LastCacheUpdate > StatusScanner.CACHE_INTERVAL then
+        return false -- Force update every 5 seconds
+    end
+
+    if #StatusScanner.CachedControllers == 0 then
+        -- We didn't find any. Instead of scanning every tick, rely on the 5-sec interval
+        return true 
+    end
     
     for _, controller in ipairs(StatusScanner.CachedControllers) do
         if not controller:IsValid() or not controller.Pawn or not controller.Pawn:IsValid() then
+            -- Controller invalid, force update
             return false
         end
     end
+    
     return true
 end
 

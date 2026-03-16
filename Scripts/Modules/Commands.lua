@@ -78,7 +78,25 @@ function Commands.ExecuteAction(teamName, action, args)
     
     local pawn = pc.Pawn
     if not pawn or not pawn:IsValid() then
-        Utils.Log("Player Pawn not found.")
+        pawn = pc.AcknowledgedPawn
+    end
+    
+    if not pawn or not pawn:IsValid() then
+        pawn = pc.Character
+    end
+
+    if not pawn or not pawn:IsValid() then
+        pawn = FindFirstOf("PlayerCharacter")
+        if not pawn or not pawn:IsValid() then
+            pawn = FindFirstOf("ReadyOrNotCharacter")
+        end
+        if pawn and pawn:IsValid() then
+            Utils.Log("Found Player Pawn via direct search: " .. pawn:GetFullName())
+        end
+    end
+    
+    if not pawn or not pawn:IsValid() then
+        Utils.Log("CRITICAL: Player Pawn not found after all fallbacks.")
         return
     end
     
@@ -96,9 +114,9 @@ function Commands.ExecuteAction(teamName, action, args)
         local forward = pawn:GetActorForwardVector()
         local dist = 600.0
         targetLoc = {
-            X = pawnLoc.X + forward.X * dist,
-            Y = pawnLoc.Y + forward.Y * dist,
-            Z = pawnLoc.Z
+            X = tonumber(pawnLoc.X) + tonumber(forward.X) * dist,
+            Y = tonumber(pawnLoc.Y) + tonumber(forward.Y) * dist,
+            Z = tonumber(pawnLoc.Z)
         }
     end
     
@@ -111,25 +129,25 @@ function Commands.ExecuteAction(teamName, action, args)
         manager:GiveHoldCommand(team)
         
     elseif cmd == "MOVE" then
-        Utils.Log("Executing MOVE for Team " .. tostring(team))
-        manager:GiveMoveCommand(team, targetLoc)
+        Utils.Log(string.format("Executing MOVE for Team %s to %.2f %.2f %.2f", tostring(team), targetLoc.X, targetLoc.Y, targetLoc.Z))
+        manager:GiveMoveCommand(team, {X=tonumber(targetLoc.X), Y=tonumber(targetLoc.Y), Z=tonumber(targetLoc.Z)})
 
     elseif cmd == "COVER" then
-        Utils.Log("Executing COVER for Team " .. tostring(team))
-        manager:GiveMoveCommand(team, targetLoc)
-        manager:GiveCoverAreaCommand(team, targetLoc)
+        Utils.Log(string.format("Executing COVER for Team %s at %.2f %.2f %.2f", tostring(team), targetLoc.X, targetLoc.Y, targetLoc.Z))
+        manager:GiveMoveCommand(team, {X=tonumber(targetLoc.X), Y=tonumber(targetLoc.Y), Z=tonumber(targetLoc.Z)})
+        manager:GiveCoverAreaCommand(team, {X=tonumber(targetLoc.X), Y=tonumber(targetLoc.Y), Z=tonumber(targetLoc.Z)})
 
     elseif cmd == "SEARCH_AND_SECURE" then
         Utils.Log("Executing SEARCH_AND_SECURE for Team " .. tostring(team))
-        manager:GiveSearchAndSecureCommand(team, pawnLoc, true)
+        manager:GiveSearchAndSecureCommand(team, {X=tonumber(pawnLoc.X), Y=tonumber(pawnLoc.Y), Z=tonumber(pawnLoc.Z)}, true)
         
     elseif cmd == "OPEN_DOOR" then
         local searchRadius = specificTargetLoc and 350 or 1000
         local searchLoc = specificTargetLoc or pawnLoc
         local door = Utils.FindNearestDoor(searchLoc, searchRadius)
         if door then
-            Utils.Log("Executing OPEN_DOOR on nearest door.")
-            manager:GiveOpenDoorCommand(door, team, pawnLoc)
+            Utils.Log(string.format("Executing OPEN_DOOR on nearest door (%s) for Team %s", door:GetFullName(), tostring(team)))
+            manager:GiveOpenDoorCommand(door, team, {X=tonumber(pawnLoc.X), Y=tonumber(pawnLoc.Y), Z=tonumber(pawnLoc.Z)})
         else
             Utils.Log("No door found nearby to open.")
         end
@@ -139,8 +157,8 @@ function Commands.ExecuteAction(teamName, action, args)
         local searchLoc = specificTargetLoc or pawnLoc
         local door = Utils.FindNearestDoor(searchLoc, searchRadius)
         if door then
-            Utils.Log("Executing BREACH on nearest door.")
-            manager:GiveBreachAndClearCommand(door, 1, team, pawnLoc, nil, nil, false, false, false, false, 0)
+            Utils.Log(string.format("Executing BREACH on nearest door (%s) for Team %s", door:GetFullName(), tostring(team)))
+            manager:GiveBreachAndClearCommand(door, 1, team, {X=tonumber(pawnLoc.X), Y=tonumber(pawnLoc.Y), Z=tonumber(pawnLoc.Z)}, nil, nil, false, false, false, false, 0, false)
         else
             Utils.Log("No door found nearby to breach.")
         end
@@ -150,8 +168,9 @@ function Commands.ExecuteAction(teamName, action, args)
         local searchLoc = specificTargetLoc or pawnLoc
         local door = Utils.FindNearestDoor(searchLoc, searchRadius)
         if door then
-            Utils.Log("Executing STACK_UP on nearest door.")
-            manager:GiveStackUpCommand(door, team, pawnLoc, pawn:GetActorUpVector(), true, 0)
+            Utils.Log(string.format("Executing STACK_UP on nearest door (%s) for Team %s", door:GetFullName(), tostring(team)))
+            local up = pawn:GetActorUpVector()
+            manager:GiveStackUpCommand(door, team, {X=tonumber(pawnLoc.X), Y=tonumber(pawnLoc.Y), Z=tonumber(pawnLoc.Z)}, {X=tonumber(up.X), Y=tonumber(up.Y), Z=tonumber(up.Z)}, true, 0)
         else
             Utils.Log("No door found nearby to stack up.")
         end
