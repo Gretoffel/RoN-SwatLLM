@@ -1,656 +1,206 @@
 {
-  "teams": {
-    "RED": {
-      "members": [
-        {
-          "location": {
-            "Z": 51.803714447472,
-            "Y": -2184.0320805307,
-            "X": 624.85809072615
-          },
-          "name": "UNKNOWN",
-          "status": "BUSY",
-          "activity": "TeamStackUp_2146627956, TeamStackUp_2146627522"
-        },
-        {
-          "location": {
-            "Z": 51.80371411415,
-            "Y": -2108.1060966624,
-            "X": 578.58815997365
-          },
-          "name": "UNKNOWN",
-          "status": "BUSY",
-          "activity": "TeamStackUp_2146627956, TeamStackUp_2146627522"
-        }
-      ],
-      "count": 2,
-      "forward": {
-        "Z": 0.0,
-        "Y": -0.80001803271328,
-        "X": 0.59997595562954
-      },
-      "center": {
-        "Z": 51.803714280811,
-        "Y": -2146.0690885965,
-        "X": 601.7231253499
-      }
-    },
-    "BLUE": {
-      "members": [
-        {
-          "location": {
-            "Z": 82.387972779268,
-            "Y": 654.42929636815,
-            "X": 609.30124507834
-          },
-          "name": "UNKNOWN",
-          "status": "BUSY",
-          "activity": "TeamStackUp_2146628861, TeamStackUp_2146628398"
-        },
-        {
-          "location": {
-            "Z": 82.387797685029,
-            "Y": 817.51385654622,
-            "X": 606.90197587249
-          },
-          "name": "UNKNOWN",
-          "status": "BUSY",
-          "activity": "TeamStackUp_2146628861, TeamStackUp_2146628398"
-        }
-      ],
-      "count": 2,
-      "forward": {
-        "Z": 0.0,
-        "Y": -0.14226961956938,
-        "X": -0.98982794229481
-      },
-      "center": {
-        "Z": 82.387885232148,
-        "Y": 735.97157645719,
-        "X": 608.10161047541
-      }
-    },
-    "GOLD": {
-      "members": [
-        {
-          "location": {
-            "Z": 82.387972779268,
-            "Y": 654.42929636815,
-            "X": 609.30124507834
-          },
-          "name": "UNKNOWN",
-          "status": "BUSY",
-          "activity": "TeamStackUp_2146628861, TeamStackUp_2146628398"
-        },
-        {
-          "location": {
-            "Z": 82.387797685029,
-            "Y": 817.51385654622,
-            "X": 606.90197587249
-          },
-          "name": "UNKNOWN",
-          "status": "BUSY",
-          "activity": "TeamStackUp_2146628861, TeamStackUp_2146628398"
-        },
-        {
-          "location": {
-            "Z": 51.803714447472,
-            "Y": -2184.0320805307,
-            "X": 624.85809072615
-          },
-          "name": "UNKNOWN",
-          "status": "BUSY",
-          "activity": "TeamStackUp_2146627956, TeamStackUp_2146627522"
-        },
-        {
-          "location": {
-            "Z": 51.80371411415,
-            "Y": -2108.1060966624,
-            "X": 578.58815997365
-          },
-          "name": "UNKNOWN",
-          "status": "BUSY",
-          "activity": "TeamStackUp_2146627956, TeamStackUp_2146627522"
-        }
-      ],
-      "count": 4,
-      "forward": {
-        "Z": 0.0,
-        "Y": -0.99900776780485,
-        "X": -0.044536275838572
-      },
-      "center": {
-        "Z": 67.09579975648,
-        "Y": -705.04875606967,
-        "X": 604.91236791266
-      }
-    }
-  },
+  "teams": {},
   "nearby_characters": {},
+  "timestamp": 1773683278,
   "nearby_evidence": {},
-  "timestamp": 1773350012,
   "nearby_doors": [
     {
-      "is_open": false,
       "front_room": "Center",
-      "distance": 2,
-      "back_room": "Center",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "back-left",
-      "locked": false,
-      "location": {
-        "Z": -9.412841796875,
-        "Y": -885.54382324219,
-        "X": 718.21313476562
-      },
-      "id": "BP_Door_New13_17",
       "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
-      "front_room": "CornerRight",
-      "distance": 2,
-      "back_room": "Center",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
       "locked": false,
-      "location": {
-        "Z": -9.7537841796875,
-        "Y": -516.30694580078,
-        "X": 385.58926391602
-      },
-      "id": "BP_Door_New24",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": true,
-      "front_room": "CornerRight",
-      "distance": 6,
-      "back_room": "CornerLeft",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": false,
-      "location": {
-        "Z": -9.7539291381836,
-        "Y": -952.55218505859,
-        "X": 1.8635685443878
-      },
-      "id": "BP_Door_New23",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": true,
-      "front_room": "Center",
-      "distance": 6,
-      "back_room": "Center",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "back-left",
-      "locked": false,
-      "location": {
-        "Z": -9.7539138793945,
-        "Y": -25.847991943359,
-        "X": 571.99670410156
-      },
-      "id": "BP_Door_New22",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
-      "front_room": "CornerRight",
-      "distance": 7,
-      "back_room": "CornerLeft",
-      "is_double_door": false,
-      "is_wedged": false,
       "direction": "front-left",
-      "locked": false,
-      "location": {
-        "Z": -9.90771484375,
-        "Y": -1408.9444580078,
-        "X": 386.16412353516
-      },
-      "id": "BP_Door_New11_14",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
+      "distance": 5,
       "is_open": false,
-      "front_room": "CornerRight",
-      "distance": 7,
-      "back_room": "HallwayLeft",
-      "is_double_door": false,
       "is_wedged": false,
-      "direction": "left",
-      "locked": false,
+      "back_room": "Center",
+      "is_double_door": false,
+      "jammed": false,
       "location": {
-        "Z": -9.9077301025391,
-        "Y": -952.23602294922,
-        "X": -151.79147338867
+        "Z": -700.00006103516,
+        "X": -3357.4221191406,
+        "Y": -339.94982910156
       },
-      "id": "BP_Door_New10_11",
-      "is_broken": false,
-      "jammed": false
+      "id": "BP_Door_New6"
     },
     {
+      "front_room": "Center",
+      "is_broken": false,
+      "locked": false,
+      "direction": "front",
+      "distance": 7,
       "is_open": false,
+      "is_wedged": false,
+      "back_room": "Center",
+      "is_double_door": false,
+      "jammed": false,
+      "location": {
+        "Z": -699.99975585938,
+        "X": -2966.4345703125,
+        "Y": 45.090240478516
+      },
+      "id": "BP_Door_New3"
+    },
+    {
       "front_room": "CornerLeft",
+      "is_broken": false,
+      "locked": false,
+      "direction": "front-left",
       "distance": 9,
+      "is_open": false,
+      "is_wedged": false,
       "back_room": "Center",
       "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": false,
+      "jammed": false,
       "location": {
-        "Z": -9.4127426147461,
-        "Y": -536.15734863281,
-        "X": -336.70495605469
+        "Z": -700.00006103516,
+        "X": -2987.3857421875,
+        "Y": -611.62231445312
       },
-      "id": "BP_Door_New8_5",
-      "is_broken": false,
-      "jammed": false
+      "id": "BP_Door_New_2"
     },
     {
-      "is_open": false,
-      "front_room": "CornerLeft",
-      "distance": 10,
-      "back_room": "HallwayRight",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": false,
-      "location": {
-        "Z": -9.9076995849609,
-        "Y": -951.25250244141,
-        "X": -400.42422485352
-      },
-      "id": "BP_Door_New9_8",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
       "front_room": "Center",
-      "distance": 10,
-      "back_room": "Center",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "front-left",
-      "locked": false,
-      "location": {
-        "Z": -40.347675323486,
-        "Y": -1594.2666015625,
-        "X": 118.06860351562
-      },
-      "id": "BP_Door_New18_2",
       "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
-      "front_room": "Center",
-      "distance": 11,
-      "back_room": "Center",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
       "locked": false,
-      "location": {
-        "Z": -9.7539215087891,
-        "Y": -26.644798278809,
-        "X": -272.47131347656
-      },
-      "id": "BP_Door_New17",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": true,
-      "front_room": "CornerRight",
-      "distance": 11,
-      "back_room": "Center",
-      "is_double_door": false,
-      "is_wedged": false,
       "direction": "front",
-      "locked": false,
-      "location": {
-        "Z": -40.346282958984,
-        "Y": -1857.5125732422,
-        "X": 774.66180419922
-      },
-      "id": "BP_Door_New7_2",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
+      "distance": 10,
       "is_open": false,
-      "front_room": "Center",
-      "distance": 13,
-      "back_room": "Hallway",
-      "is_double_door": false,
       "is_wedged": false,
-      "direction": "back-left",
-      "locked": false,
-      "location": {
-        "Z": -9.75390625,
-        "Y": 538.57281494141,
-        "X": 175.7712097168
-      },
-      "id": "BP_Door_New16",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
-      "front_room": "CornerLeft",
-      "distance": 13,
-      "back_room": "CornerRight",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": false,
-      "location": {
-        "Z": -9.908332824707,
-        "Y": -948.75891113281,
-        "X": -690.82342529297
-      },
-      "id": "BP_Door_New30",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": true,
-      "front_room": "Center",
-      "distance": 14,
-      "back_room": "CornerLeft",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": false,
-      "location": {
-        "Z": -9.7539081573486,
-        "Y": -519.21765136719,
-        "X": -811.38177490234
-      },
-      "id": "BP_Door_New26",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
-      "front_room": "Center",
-      "distance": 14,
       "back_room": "Center",
       "is_double_door": false,
-      "is_wedged": false,
-      "direction": "back-left",
-      "locked": false,
+      "jammed": false,
       "location": {
-        "Z": -9.75390625,
-        "Y": 774.05419921875,
-        "X": 542.07067871094
+        "Z": -700.00012207031,
+        "X": -2748.6103515625,
+        "Y": 314.36840820312
       },
-      "id": "BP_Door_New4",
-      "is_broken": false,
-      "jammed": false
+      "id": "BP_Door_New11"
     },
     {
-      "is_open": false,
       "front_room": "Center",
-      "distance": 14,
-      "back_room": "Hallway",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": false,
-      "location": {
-        "Z": -9.90771484375,
-        "Y": 542.94543457031,
-        "X": -122.14209747314
-      },
-      "id": "BP_Door_New28_23",
       "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": true,
-      "front_room": "Center",
-      "distance": 15,
-      "back_room": "Center",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "front-left",
       "locked": false,
-      "location": {
-        "Z": -9.75390625,
-        "Y": -1858.9520263672,
-        "X": -444.09683227539
-      },
-      "id": "BP_Door_New25",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
-      "front_room": "CornerLeft",
-      "distance": 15,
-      "back_room": "HallwayRight",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": false,
-      "location": {
-        "Z": -9.9083709716797,
-        "Y": -22.274858474731,
-        "X": -763.87573242188
-      },
-      "id": "BP_Door_New29_26",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": true,
-      "front_room": "Center",
-      "distance": 15,
-      "back_room": "Center",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": false,
-      "location": {
-        "Z": -9.9076843261719,
-        "Y": 274.25802612305,
-        "X": -597.04595947266
-      },
-      "id": "BP_Door_New27_20",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
-      "front_room": "HallwayRight",
-      "distance": 16,
-      "back_room": "CornerLeft",
-      "is_double_door": false,
-      "is_wedged": false,
       "direction": "front-right",
-      "locked": false,
-      "location": {
-        "Z": -38.921875,
-        "Y": -2303.0114746094,
-        "X": 778.22222900391
-      },
-      "id": "BP_Door_New6_2",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
+      "distance": 13,
       "is_open": false,
-      "front_room": "Center",
-      "distance": 16,
+      "is_wedged": false,
       "back_room": "Center",
       "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": false,
+      "jammed": false,
       "location": {
-        "Z": -13.03125,
-        "Y": -264.16891479492,
-        "X": -939.75769042969
+        "Z": -700.00012207031,
+        "X": -2666.1755371094,
+        "Y": 870.25317382812
       },
-      "id": "BP_Door_New21",
-      "is_broken": false,
-      "jammed": false
+      "id": "BP_Door_New9"
     },
     {
+      "front_room": "Center",
+      "is_broken": false,
+      "locked": false,
+      "direction": "front-right",
+      "distance": 13,
       "is_open": false,
+      "is_wedged": false,
+      "back_room": "Center",
+      "is_double_door": false,
+      "jammed": false,
+      "location": {
+        "Z": -700.00024414062,
+        "X": -3044.0285644531,
+        "Y": 1175.3120117188
+      },
+      "id": "BP_Door_New12"
+    },
+    {
       "front_room": "CornerRight",
-      "distance": 17,
-      "back_room": "Center",
-      "is_double_door": true,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": true,
-      "location": {
-        "Z": -9.7542572021484,
-        "Y": 905.42041015625,
-        "X": -327.546875
-      },
-      "id": "BP_Door_New5",
       "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": true,
-      "front_room": "Center",
-      "distance": 17,
-      "back_room": "Center",
-      "is_double_door": true,
-      "is_wedged": false,
-      "direction": "back-right",
       "locked": false,
-      "location": {
-        "Z": -40.54296875,
-        "Y": -813.220703125,
-        "X": 2373.3894042969
-      },
-      "id": "BP_Door_New12_13",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": true,
-      "front_room": "Center",
-      "distance": 17,
-      "back_room": "Center",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": false,
-      "location": {
-        "Z": -9.7539291381836,
-        "Y": 520.91290283203,
-        "X": -710.35192871094
-      },
-      "id": "BP_Door_New19",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
-      "front_room": "Center",
-      "distance": 20,
-      "back_room": "Hallway",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "front-left",
-      "locked": false,
-      "location": {
-        "Z": -9.9076995849609,
-        "Y": -2120.892578125,
-        "X": -934.92895507812
-      },
-      "id": "BP_Door_New31_2",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
-      "front_room": "Center",
-      "distance": 21,
-      "back_room": "Center",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "back-left",
-      "locked": false,
-      "location": {
-        "Z": -55.768432617188,
-        "Y": 1404.6663818359,
-        "X": 798.16064453125
-      },
-      "id": "BP_Door_New34_2",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
-      "front_room": "Center",
-      "distance": 32,
-      "back_room": "Center",
-      "is_double_door": false,
-      "is_wedged": false,
-      "direction": "left",
-      "locked": false,
-      "location": {
-        "Z": -55.575653076172,
-        "Y": 1311.5249023438,
-        "X": -1982.1209716797
-      },
-      "id": "BP_Door_New32_2",
-      "is_broken": false,
-      "jammed": false
-    },
-    {
-      "is_open": false,
-      "front_room": "CornerLeft",
-      "distance": 33,
-      "back_room": "CornerRight",
-      "is_double_door": false,
-      "is_wedged": false,
       "direction": "front",
-      "locked": false,
+      "distance": 13,
+      "is_open": false,
+      "is_wedged": false,
+      "back_room": "Center",
+      "is_double_door": false,
+      "jammed": false,
       "location": {
-        "Z": -55.768890380859,
-        "Y": -3409.2863769531,
-        "X": -1320.283203125
+        "Z": -700.00024414062,
+        "X": -2384.7338867188,
+        "Y": -193.22966003418
       },
-      "id": "BP_Door_New33_2",
-      "is_broken": false,
-      "jammed": false
+      "id": "BP_Door_New5"
     },
     {
-      "is_open": false,
       "front_room": "Center",
-      "distance": 33,
-      "back_room": "Center",
-      "is_double_door": true,
-      "is_wedged": false,
-      "direction": "front-left",
-      "locked": false,
-      "location": {
-        "Z": -11.007811546326,
-        "Y": -812.99365234375,
-        "X": -2733.9309082031
-      },
-      "id": "BP_Door_New20",
       "is_broken": false,
-      "jammed": false
+      "locked": false,
+      "direction": "front-left",
+      "distance": 14,
+      "is_open": false,
+      "is_wedged": false,
+      "back_room": "Center",
+      "is_double_door": false,
+      "jammed": false,
+      "location": {
+        "Z": -700.00012207031,
+        "X": -2421.2761230469,
+        "Y": -590.93395996094
+      },
+      "id": "BP_Door_New10"
+    },
+    {
+      "front_room": "Center",
+      "is_broken": false,
+      "locked": false,
+      "direction": "front",
+      "distance": 16,
+      "is_open": false,
+      "is_wedged": false,
+      "back_room": "Center",
+      "is_double_door": false,
+      "jammed": false,
+      "location": {
+        "Z": -700.00012207031,
+        "X": -2132.2136230469,
+        "Y": 528.46826171875
+      },
+      "id": "BP_Door_New8"
+    },
+    {
+      "front_room": "CornerRight",
+      "is_broken": false,
+      "locked": false,
+      "direction": "front-left",
+      "distance": 17,
+      "is_open": false,
+      "is_wedged": false,
+      "back_room": "CornerLeft",
+      "is_double_door": false,
+      "jammed": false,
+      "location": {
+        "Z": -700.00012207031,
+        "X": -2230.8920898438,
+        "Y": -858.74322509766
+      },
+      "id": "BP_Door_New4"
+    },
+    {
+      "front_room": "Center",
+      "is_broken": false,
+      "locked": false,
+      "direction": "front",
+      "distance": 17,
+      "is_open": false,
+      "is_wedged": false,
+      "back_room": "Center",
+      "is_double_door": false,
+      "jammed": false,
+      "location": {
+        "Z": -700.00012207031,
+        "X": -1962.7497558594,
+        "Y": -313.70806884766
+      },
+      "id": "BP_Door_New7"
     }
   ]
 }

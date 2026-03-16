@@ -8,4 +8,5 @@ manualToDo.txt
 user_prompt.txt
 prompt_request.json
 environment.json
-commands.txt
+commands.txt
+environment_graph.json

@@ -7,7 +7,7 @@ Config.doorsFilepath = Config.baseDir .. "doors.txt"
 
 -- P Hotkey Configuration
 -- Format: "TEAM COMMAND" or "COMMAND" (defaults to GOLD)
-Config.P_Key_Action1 = "GOLD MOVE"
+Config.P_Key_Action1 = "RED MOVE"
 Config.P_Key_Action2 = "NONE"
 
 -- Environment Sensing Configuration

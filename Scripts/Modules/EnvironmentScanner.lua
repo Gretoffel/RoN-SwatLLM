@@ -14,18 +14,25 @@ EnvironmentScanner.TacticalData = {
 }
 
 -- Optimization Cache for Actor Lists
-local CachedActors = {
+EnvironmentScanner.CachedActors = {
     doors = {},
     suspects = {},
     civilians = {},
-    initialized = false
+    rooms = {},
+    initialized = false,
+    last_refresh = 0
 }
 
--- Perform a ONE-TIME full scan of the world to find interactive actors
-function EnvironmentScanner.InitializeCache(force)
-    if not force and CachedActors.initialized then return end
+local CachedActors = EnvironmentScanner.CachedActors
 
-    Utils.Log("Initializing Environment Actor Cache (Full World Scan)...")
+-- Perform a full scan of the world to find interactive actors
+function EnvironmentScanner.InitializeCache(force)
+    local currentTime = os.time()
+    if not force and CachedActors.initialized and (currentTime - CachedActors.last_refresh < Config.ACTOR_CACHE_INTERVAL) then 
+        return 
+    end
+
+    -- Utils.Log(string.format("Refreshing Environment Actor Cache (Full World Scan, Interval: %.1fs)...", Config.ACTOR_CACHE_INTERVAL))
     
     -- Doors: RoN doors are typically of class "Door"
     CachedActors.doors = FindAllOf("Door") or {}
@@ -34,10 +41,14 @@ function EnvironmentScanner.InitializeCache(force)
     CachedActors.suspects = FindAllOf("SuspectCharacter") or {}
     CachedActors.civilians = FindAllOf("CivilianCharacter") or {}
 
+    -- Rooms (for EnvironmentGraph)
+    CachedActors.rooms = FindAllOf("RoomVisualizer") or {}
+
     CachedActors.initialized = true
+    CachedActors.last_refresh = currentTime
     
-    Utils.Log(string.format("Cache Initialized: %d Doors, %d Suspects, %d Civilians", 
-        #CachedActors.doors, #CachedActors.suspects, #CachedActors.civilians))
+    -- Utils.Log(string.format("Cache Updated: %d Doors, %d Rooms, %d Suspects, %d Civilians", 
+    --    #CachedActors.doors, #CachedActors.rooms, #CachedActors.suspects, #CachedActors.civilians))
 end
 
 -- Calculate team's average position and orientation
@@ -103,6 +114,9 @@ function EnvironmentScanner.GetTeamTacticalStatus(teamName)
     return nil
 end
 
+EnvironmentScanner.StaticDoorCache = nil
+EnvironmentScanner.LastDoorCount = 0
+
 -- Scan for nearby tactical objects from CACHED actors only
 function EnvironmentScanner.ScanEnvironment()
     -- Ensure we have the base actors (only runs once unless forced)
@@ -129,109 +143,107 @@ function EnvironmentScanner.ScanEnvironment()
         end
     end
 
-    local scanOrigin = nil
-    local scanForward = {X = 1, Y = 0, Z = 0} -- Default forward
+    local dirOrigin, dirForward = Utils.GetPlayerViewpoint()
 
-    -- 1. Determine Scan Origin (Team Center)
-    if internalTeams.GOLD then
-        scanOrigin = internalTeams.GOLD.center
-    elseif internalTeams.RED then
-        scanOrigin = internalTeams.RED.center
-    elseif internalTeams.BLUE then
-        scanOrigin = internalTeams.BLUE.center
-    end
-
-    -- 2. Determine Reference for Directions (Prefer Player Camera, fallback to Team)
-    local dirOrigin = scanOrigin
-    local dirForward = scanForward
-
-    local pc = Utils.GetPlayerController()
-    if pc and pc:IsValid() then
-        local pawn = pc.Pawn or pc.AcknowledgedPawn
-        if pawn and pawn:IsValid() then
-            dirOrigin = pawn:K2_GetActorLocation()
-            local camRot = pc:GetControlRotation()
-            local yawRad = math.rad(camRot.Yaw)
-            dirForward = {
-                X = math.cos(yawRad),
-                Y = math.sin(yawRad),
-                Z = 0
-            }
+    -- 2. Fallback to Team if Player not found
+    local scanOrigin = dirOrigin
+    if not scanOrigin then
+        if internalTeams.GOLD then
+            scanOrigin = internalTeams.GOLD.center
+        elseif internalTeams.RED then
+            scanOrigin = internalTeams.RED.center
+        elseif internalTeams.BLUE then
+            scanOrigin = internalTeams.BLUE.center
         end
+        dirOrigin = scanOrigin
     end
 
     if not scanOrigin then return end
     
     local radiusSq = Config.SCAN_RADIUS * Config.SCAN_RADIUS
 
-    -- 2. Update Door States (from cache)
+    -- 2. Update Door States (using static cache)
     if Config.SCAN_DOORS then
-        local roomPosMap = {
-            [0] = "Center", [1] = "CornerLeft", [2] = "CornerRight",
-            [3] = "Hallway", [4] = "HallwayLeft", [5] = "HallwayRight"
-        }
-
-        local doorMap = {} -- Map to group double doors by ID or linked ID
-
-        for _, door in ipairs(CachedActors.doors) do
-            if door:IsValid() then
-                local loc = door:K2_GetActorLocation()
-                local distSq = Utils.GetDistanceSquared(scanOrigin, loc)
-                
-                if distSq < radiusSq then
+        local doors = CachedActors.doors
+        
+        if not EnvironmentScanner.StaticDoorCache or EnvironmentScanner.LastDoorCount ~= #doors then
+            EnvironmentScanner.StaticDoorCache = {}
+            EnvironmentScanner.LastDoorCount = #doors
+            
+            local roomPosMap = {
+                [0] = "Center", [1] = "CornerLeft", [2] = "CornerRight",
+                [3] = "Hallway", [4] = "HallwayLeft", [5] = "HallwayRight"
+            }
+            
+            for _, door in ipairs(doors) do
+                if door:IsValid() then
                     local myId = door:GetFName():ToString()
-                    -- Find link: either via DriveSubDoor or MainSubDoor relationship
-                    local linkedId = (door.DriveSubDoor and door.DriveSubDoor:IsValid()) and door.DriveSubDoor:GetFName():ToString() or nil
+                    local groupId = myId
                     
-                    -- Use math.abs because doors can swing in negative directions
-                    local amount = door.OpenCloseAmount or 0
-                    local isOpen = math.abs(amount) > 5.0
-                    local isLocked = door.bLocked == 1 or door.bLocked == true
-                    local isJammed = door.bJamInProgress == 1 or door.bJamInProgress == true
-                    local isBroken = door.bBroken == 1 or door.bBroken == true
-                    local isWedged = (door.AttachedWedge and door.AttachedWedge:IsValid()) or false
+                    local linkedId = nil
+                    if door.DriveSubDoor and door.DriveSubDoor:IsValid() then
+                        linkedId = door.DriveSubDoor:GetFName():ToString()
+                        if myId > linkedId then groupId = linkedId .. "_" .. myId
+                        else groupId = myId .. "_" .. linkedId end
+                    end
                     
-                    local existingEntry = doorMap[myId] or (linkedId and doorMap[linkedId])
-                    
-                    if existingEntry then
-                        -- Merge: True if EITHER is true
-                        existingEntry.is_open = existingEntry.is_open or isOpen
-                        existingEntry.locked = existingEntry.locked or isLocked
-                        existingEntry.is_broken = existingEntry.is_broken or isBroken
-                        existingEntry.is_wedged = existingEntry.is_wedged or isWedged
-                        existingEntry.jammed = existingEntry.jammed or isJammed
-                        existingEntry.is_double_door = true
-                        
-                        local myDist = math.floor(math.sqrt(distSq) / 100)
-                        if myDist < existingEntry.distance then existingEntry.distance = myDist end
-                    else
-                        local entry = {
-                            id = myId,
-                            location = {X = loc.X, Y = loc.Y, Z = loc.Z},
-                            distance = math.floor(math.sqrt(distSq) / 100),
-                            direction = Utils.GetRelativeDirection(dirOrigin, dirForward, loc),
-                            locked = isLocked,
-                            jammed = isJammed,
-                            is_broken = isBroken,
-                            is_wedged = isWedged,
-                            is_open = isOpen,
+                    if not EnvironmentScanner.StaticDoorCache[groupId] then
+                        local loc = door:K2_GetActorLocation()
+                        EnvironmentScanner.StaticDoorCache[groupId] = {
+                            actors = { door },
+                            id = groupId,
+                            is_double_door = (linkedId ~= nil),
                             front_room = roomPosMap[door.FrontRoomPosition] or "Unknown",
                             back_room = roomPosMap[door.BackRoomPosition] or "Unknown",
-                            is_double_door = (linkedId ~= nil)
+                            location = { X = loc.X, Y = loc.Y, Z = loc.Z }
                         }
-                        doorMap[myId] = entry
-                        if linkedId then doorMap[linkedId] = entry end
+                    else
+                        table.insert(EnvironmentScanner.StaticDoorCache[groupId].actors, door)
                     end
                 end
             end
         end
 
-        -- Convert map back to unique array
-        local processedEntries = {}
-        for _, entry in pairs(doorMap) do
-            if not processedEntries[entry] then
-                table.insert(tacticalState.nearby_doors, entry)
-                processedEntries[entry] = true
+        for groupId, staticData in pairs(EnvironmentScanner.StaticDoorCache) do
+            local distSq = Utils.GetDistanceSquared(scanOrigin, staticData.location)
+            if distSq < radiusSq then
+                local isOpen = false
+                local isLocked = false
+                local isBroken = false
+                local isJammed = false
+                local isWedged = false
+                
+                for _, door in ipairs(staticData.actors) do
+                    if door and door:IsValid() then
+                        local broken = door.bDoorBroken == 1 or door.bDoorBroken == true
+                        local amount = door.OpenCloseAmount or 0
+                        local open = math.abs(amount) > 5.0 or broken
+                        local locked = door.bLocked == 1 or door.bLocked == true
+                        local jammed = door.bJamInProgress == 1 or door.bJamInProgress == true
+                        local wedged = (door.AttachedWedge and door.AttachedWedge:IsValid()) or false
+                        
+                        isOpen = isOpen or open
+                        isLocked = isLocked or locked
+                        isBroken = isBroken or broken
+                        isJammed = isJammed or jammed
+                        isWedged = isWedged or wedged
+                    end
+                end
+                
+                table.insert(tacticalState.nearby_doors, {
+                    id = staticData.id,
+                    location = {X = staticData.location.X, Y = staticData.location.Y, Z = staticData.location.Z},
+                    distance = math.floor(math.sqrt(distSq) / 100),
+                    direction = Utils.GetRelativeDirection(dirOrigin, dirForward, staticData.location),
+                    locked = isLocked,
+                    jammed = isJammed,
+                    is_broken = isBroken,
+                    is_wedged = isWedged,
+                    is_open = isOpen,
+                    front_room = staticData.front_room,
+                    back_room = staticData.back_room,
+                    is_double_door = staticData.is_double_door
+                })
             end
         end
 

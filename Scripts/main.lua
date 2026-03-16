@@ -4,6 +4,7 @@ local StatusScanner = require("Modules.StatusScanner")
 local Commands = require("Modules.Commands")
 local CommandQueue = require("Modules.CommandQueue")
 local EnvironmentScanner = require("Modules.EnvironmentScanner")
+local EnvironmentGraph = require("Modules.EnvironmentGraph")
 
 -- CommandQueue and dependencies are already loaded globally or via require
 CommandQueue.Init({
@@ -66,6 +67,7 @@ function()
     if currentClock - ScanTimer > Config.SCAN_INTERVAL then
         ScanTimer = currentClock
         EnvironmentScanner.ExportToFile()
+        EnvironmentGraph.ExtractGraph()
     end
 end)
 
@@ -74,6 +76,7 @@ local SavedCrosshairLoc = nil
 RegisterKeyBind(Key.K, function()
     Utils.Log("Manual Environment Scan Triggered.")
     EnvironmentScanner.ExportToFile()
+    EnvironmentGraph.ExtractGraph()
 end)
 
 RegisterKeyBind(Key.L, function()
@@ -91,12 +94,20 @@ RegisterKeyBind(Key.L, function()
         if pawn and pawn:IsValid() then
             local widget = pawn.SwatCommandWidget
             if widget and widget:IsValid() then
-                local ctx = widget.ContextualData
+                local ctx = widget.ContextualData1
                 if ctx and ctx.Location then
-                    SavedCrosshairLoc = { X = ctx.Location.X, Y = ctx.Location.Y, Z = ctx.Location.Z }
-                    Utils.Log(string.format("Copied Crosshair Coordinates: %.2f %.2f %.2f", SavedCrosshairLoc.X, SavedCrosshairLoc.Y, SavedCrosshairLoc.Z))
+                    local locX = tonumber(ctx.Location.X)
+                    local locY = tonumber(ctx.Location.Y)
+                    local locZ = tonumber(ctx.Location.Z)
+                    
+                    if locX and locY and locZ then
+                        SavedCrosshairLoc = { X = locX, Y = locY, Z = locZ }
+                        Utils.Log(string.format("Copied Crosshair Coordinates: %.2f %.2f %.2f", SavedCrosshairLoc.X, SavedCrosshairLoc.Y, SavedCrosshairLoc.Z))
+                    else
+                        Utils.Log("L failed: Coordinates are not numbers (UE4SS type mismatch).")
+                    end
                 else
-                    Utils.Log("L failed: No tactical object under crosshair (Point at floor/door).")
+                    Utils.Log("L failed: No tactical object under crosshair (ContextualData1 or Location is nil).")
                 end
             else
                 Utils.Log("L failed: SwatCommandWidget not found on character.")
